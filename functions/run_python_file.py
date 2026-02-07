@@ -1,6 +1,8 @@
 import os
 import subprocess
 
+from google.genai import types
+
 
 def run_python_file(working_directory, file_path, args=None):
     try:
@@ -26,7 +28,7 @@ def run_python_file(working_directory, file_path, args=None):
         output_string = ""
         if result.returncode != 0:
             output_string += f"Process exited with code {result.returncode}\n"
-        if result.stdout == None:
+        if result.stdout is None:
             output_string += "No output produced\n"
         else:
             output_string += f"STDOUT: {result.stdout}\nSTDERR: {result.stderr}\n"
@@ -34,3 +36,27 @@ def run_python_file(working_directory, file_path, args=None):
 
     except Exception as e:
         return f"Error: {e}"
+
+
+schema_run_python_file = types.FunctionDeclaration(
+    name="run_python_file",
+    description="Runs a python file and returns the output as a string",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="The path to the python file to run",
+            ),
+            "args": types.Schema(
+                type=types.Type.ARRAY,
+                description="Optional arguments to add to the python command",
+                items=types.Schema(
+                    type=types.Type.STRING,
+                    description="Single command-line argument",
+                ),
+            ),
+        },
+        required=["file_path"],
+    ),
+)

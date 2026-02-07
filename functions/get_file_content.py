@@ -28,16 +28,17 @@ def get_file_content(working_directory, file_path):
         return f"Error: {e}"
 
 
-schema_get_files_content = types.FunctionDeclaration(
-    name="get_files_content",
-    description="Lists the",
+schema_get_file_content = types.FunctionDeclaration(
+    name="get_file_content",
+    description="Reads a file and saves the contents in a string truncated up to MAX_CHARS characters and returns it",
     parameters=types.Schema(
         type=types.Type.OBJECT,
         properties={
-            "directory": types.Schema(
+            "file_path": types.Schema(
                 type=types.Type.STRING,
-                description="Directory path to list files from, relative to the working directory (default is the working directory itself)",
+                description="File path to the file whose content you want to get, relative to the working directory (default is the working directory itself)",
             ),
         },
+        required=["file_path"],
     ),
 )
